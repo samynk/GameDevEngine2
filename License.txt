@@ -1,0 +1,6 @@
+Game Engine DAE 2016-2022
+Contributors
+Bart Uyttenhove
+Marleen De Wandel
+Matthieu Delaere
+Peter Verswyvelen
