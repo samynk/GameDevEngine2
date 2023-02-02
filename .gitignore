@@ -1,6 +1,7 @@
 #Folders 
 out/
 Projects/
+.vs/
 
 # Prerequisites
 *.d

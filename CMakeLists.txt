@@ -5,8 +5,5 @@ add_subdirectory(Libraries/Engine)
 add_subdirectory(Libraries/Test)
 include(./cmake/dae/dae_utils.cmake)
 DefineLibraries()
-# Add your game project here. 
-
-
-
+include(projects.cmake)
 include(InstallRequiredSystemLibraries)
