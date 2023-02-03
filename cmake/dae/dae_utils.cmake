@@ -7,22 +7,25 @@ set( SDL2_MIXER_PATH "${CMAKE_SOURCE_DIR}/Libraries/SDL2_mixer-2.0.4")
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/sdl2)
 # Add SDL2 library
 find_package(SDL2 REQUIRED)
+target_link_libraries(Core SDL2::Main)
 # Add SDL2_image library
 find_package(SDL2_image REQUIRED)
+target_link_libraries(Core SDL2::Image)
 # Add SDL2_ttf library
 find_package(SDL2_ttf REQUIRED)
+target_link_libraries(Core SDL2::TTF)
 # Add SDL2_net library
 #find_package(SDL2_net REQUIRED)
 #target_link_libraries(${PROJECT_NAME} SDL2::Net)
 # Add SDL2_mixer library
 find_package(SDL2_mixer REQUIRED)
 
-target_link_libraries(Core SDL2::Image)
-target_link_libraries(Core SDL2::Main)
-target_link_libraries(Core SDL2::Mixer)
-target_link_libraries(Core SDL2::TTF)
 
-find_package(OpenGL REQUIRED)
+
+target_link_libraries(Core SDL2::Mixer)
+
+
+find_package(OpenGL REQUIRED) 
 target_link_libraries(Core OpenGL::GL)
 
 include(FetchContent)
