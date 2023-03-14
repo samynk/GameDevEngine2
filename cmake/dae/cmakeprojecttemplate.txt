@@ -7,6 +7,17 @@ projectName.cpp
 
 set_target_properties(projectName PROPERTIES FOLDER Games)
 
+# enable AddressSanitizer on modern platforms
+target_compile_options(projectName PRIVATE
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-static-libstdc++ -static-libasan>
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-fsanitize=leak>
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-fno-omit-frame-pointer>
+)
+
+target_link_options(projectName PRIVATE
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-llsan>
+)
+
 target_include_directories(projectName PUBLIC ${GAME_INCLUDE_PATH})
 target_link_libraries(projectName PUBLIC Core)
 target_link_libraries(projectName PUBLIC OpenGL::GL)

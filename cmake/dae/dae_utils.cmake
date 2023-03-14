@@ -41,6 +41,9 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_target_properties(CoreTest Core gtest gtest_main gmock gmock_main PROPERTIES FOLDER HiddenTargets)
 
 
+# tell our code we are using asan
+target_compile_definitions(Core PUBLIC USING_ASAN)
+
 endfunction()
 
 
