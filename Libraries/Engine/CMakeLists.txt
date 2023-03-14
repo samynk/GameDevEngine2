@@ -25,15 +25,15 @@ utils.h
 utils.cpp
 )
 
-source_group( "Math code" 
+source_group("Math code" 
 FILES
-	Vector2f.h
-	Vector2f.cpp
-	Matrix2x3.h
-	Matrix2x3.cpp
+    Vector2f.h
+    Vector2f.cpp
+    Matrix2x3.h
+    Matrix2x3.cpp
 )
 
-source_group ( "Engine code" 
+source_group ("Engine code" 
 FILES
 Texture.h
 Texture.cpp
