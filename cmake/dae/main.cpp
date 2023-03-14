@@ -1,24 +1,28 @@
 #include <ctime>
 #include "GameClassName.h"
 
+#ifdef WIN32
 void StartHeapControl();
-void DumpMemoryLeaks();
+#endif
 
 int main( int argc, char *argv[] )
 {
 	srand(static_cast<unsigned int>(time(nullptr)));
 
+#ifdef WIN32
 	StartHeapControl();
+#endif
 
 	GameClassName* pGame{ new GameClassName{ Window{ "Project name - Name, first name - 1DAEXX", 846.f , 500.f } } };
 	pGame->Run();
 	delete pGame;
 
-	DumpMemoryLeaks();
 	return 0;
 }
 
 
+// only legacy platforms need to run this
+#ifdef _WIN32
 void StartHeapControl()
 {
 #if defined(DEBUG) | defined(_DEBUG)
@@ -32,12 +36,4 @@ void StartHeapControl()
 	//_CrtSetBreakAlloc( 156 );
 #endif
 }
-
-void DumpMemoryLeaks()
-{
-#if defined(DEBUG) | defined(_DEBUG)
-	_CrtDumpMemoryLeaks();
 #endif
-}
-
-
