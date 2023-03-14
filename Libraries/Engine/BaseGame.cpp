@@ -4,7 +4,7 @@
 #include <chrono>
 #include "BaseGame.h"
 
-BaseGame::BaseGame( const Window& window )
+BaseGame::BaseGame(const Window& window)
     : m_Window{window}
     , m_Viewport{0,0,window.width,window.height}
     , m_Initialized{false}
@@ -12,15 +12,15 @@ BaseGame::BaseGame( const Window& window )
     , m_pContext{nullptr}
     ,m_MaxElapsedSeconds{ 0.1f }
 {
-    Initialize( );
+    Initialize();
 }
 
-BaseGame::~BaseGame( )
+BaseGame::~BaseGame()
 {
-    Cleanup( );
+    Cleanup();
 }
 
-void BaseGame::Initialize( )
+void BaseGame::Initialize()
 {
     // disable console close window button
     #ifdef _WIN32
@@ -30,86 +30,86 @@ void BaseGame::Initialize( )
     #endif
 
     // Initialize SDL
-    if ( SDL_Init(SDL_INIT_VIDEO /*| SDL_INIT_AUDIO*/) < 0 )
+    if (SDL_Init(SDL_INIT_VIDEO /*| SDL_INIT_AUDIO*/) < 0)
     {
-        std::cerr << "BaseGame::Initialize( ), error when calling SDL_Init: " << SDL_GetError( ) << std::endl;
+        std::cerr << "BaseGame::Initialize(), error when calling SDL_Init: " << SDL_GetError() << std::endl;
         return;
     }
 
     // Use OpenGL 2.1
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
     // Create window
     m_pWindow = SDL_CreateWindow(
-        m_Window.title.c_str( ),
+        m_Window.title.c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        int( m_Window.width ),
-        int( m_Window.height ),
-        SDL_WINDOW_OPENGL );
-    if ( m_pWindow == nullptr )
+        int(m_Window.width),
+        int(m_Window.height),
+        SDL_WINDOW_OPENGL);
+    if (m_pWindow == nullptr)
     {
-        std::cerr << "BaseGame::Initialize( ), error when calling SDL_CreateWindow: " << SDL_GetError( ) << std::endl;
+        std::cerr << "BaseGame::Initialize(), error when calling SDL_CreateWindow: " << SDL_GetError() << std::endl;
         return;
     }
 
     // Create OpenGL context 
-    m_pContext = SDL_GL_CreateContext( m_pWindow );
-    if ( m_pContext == nullptr )
+    m_pContext = SDL_GL_CreateContext(m_pWindow);
+    if (m_pContext == nullptr)
     {
-        std::cerr << "BaseGame::Initialize( ), error when calling SDL_GL_CreateContext: " << SDL_GetError( ) << std::endl;
+        std::cerr << "BaseGame::Initialize(), error when calling SDL_GL_CreateContext: " << SDL_GetError() << std::endl;
         return;
     }
 
     // Set the swap interval for the current OpenGL context,
     // synchronize it with the vertical retrace
-    if ( m_Window.isVSyncOn )
+    if (m_Window.isVSyncOn)
     {
-        if ( SDL_GL_SetSwapInterval( 1 ) < 0 )
+        if (SDL_GL_SetSwapInterval(1) < 0)
         {
-            std::cerr << "BaseGame::Initialize( ), error when calling SDL_GL_SetSwapInterval: " << SDL_GetError( ) << std::endl;
+            std::cerr << "BaseGame::Initialize(), error when calling SDL_GL_SetSwapInterval: " << SDL_GetError() << std::endl;
             return;
         }
     }
     else
     {
-        SDL_GL_SetSwapInterval( 0 );
+        SDL_GL_SetSwapInterval(0);
     }
     
     // Set the Projection matrix to the identity matrix
-    glMatrixMode( GL_PROJECTION ); 
-    glLoadIdentity( );
+    glMatrixMode(GL_PROJECTION); 
+    glLoadIdentity();
 
     // Set up a two-dimensional orthographic viewing region.
-    glOrtho( 0, m_Window.width, 0, m_Window.height, -1,1 ); // y from bottom to top
+    glOrtho(0, m_Window.width, 0, m_Window.height, -1,1); // y from bottom to top
 
     // Set the viewport to the client window area
     // The viewport is the rectangular region of the window where the image is drawn.
-    glViewport( 0, 0, int( m_Window.width ), int( m_Window.height ) );
+    glViewport(0, 0, int(m_Window.width), int(m_Window.height));
 
     // Set the Modelview matrix to the identity matrix
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity( );
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 
     // Enable color blending and use alpha blending
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Initialize PNG loading
     /*
     int imgFlags = IMG_INIT_PNG;
-    if ( !( IMG_Init( imgFlags ) & imgFlags ) )
+    if (!(IMG_Init(imgFlags) & imgFlags))
     {
-        std::cerr << "BaseGame::Initialize( ), error when calling IMG_Init: " << IMG_GetError( ) << std::endl;
+        std::cerr << "BaseGame::Initialize(), error when calling IMG_Init: " << IMG_GetError() << std::endl;
         return;
     }
     */
 
     // Initialize SDL_ttf
-    if ( TTF_Init( ) == -1 )
+    if (TTF_Init() == -1)
     {
-        std::cerr << "BaseGame::Initialize( ), error when calling TTF_Init: " << TTF_GetError( ) << std::endl;
+        std::cerr << "BaseGame::Initialize(), error when calling TTF_Init: " << TTF_GetError() << std::endl;
         return;
     }
 
@@ -117,7 +117,7 @@ void BaseGame::Initialize( )
     /*
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
     {
-        std::cerr << "BaseGame::Initialize( ), error when calling Mix_OpenAudio: " << Mix_GetError() << std::endl;
+        std::cerr << "BaseGame::Initialize(), error when calling Mix_OpenAudio: " << Mix_GetError() << std::endl;
         return;
     }
     */
@@ -125,12 +125,12 @@ void BaseGame::Initialize( )
     m_Initialized = true;
 }
 
-void BaseGame::Run( )
+void BaseGame::Run()
 {
-    if ( !m_Initialized )
+    if (!m_Initialized)
     {
-        std::cerr << "BaseGame::Run( ), BaseGame not correctly initialized, unable to run the BaseGame\n";
-        std::cin.get( );
+        std::cerr << "BaseGame::Run(), BaseGame not correctly initialized, unable to run the BaseGame\n";
+        std::cin.get();
         return;
     }
 
@@ -142,13 +142,13 @@ void BaseGame::Run( )
 
     //The event loop
     SDL_Event e{};
-    while ( !quit )
+    while (!quit)
     {
         // Poll next event from queue
-        while ( SDL_PollEvent( &e ) != 0 )
+        while (SDL_PollEvent(&e) != 0)
         {
             // Handle the polled event
-            switch ( e.type )
+            switch (e.type)
             {
             case SDL_QUIT:
                 quit = true;
@@ -200,17 +200,17 @@ void BaseGame::Run( )
     }
 }
 
-void BaseGame::Cleanup( )
+void BaseGame::Cleanup()
 {
-    SDL_GL_DeleteContext( m_pContext );
+    SDL_GL_DeleteContext(m_pContext);
 
-    SDL_DestroyWindow( m_pWindow );
+    SDL_DestroyWindow(m_pWindow);
     m_pWindow = nullptr;
 
     //Quit SDL subsystems
-    Mix_Quit( );
-    TTF_Quit( );
-    SDL_Quit( );
+    Mix_Quit();
+    TTF_Quit();
+    SDL_Quit();
 
     // enable console close window button
     #ifdef _WIN32

@@ -4,12 +4,12 @@
 #include <fstream>
 #include "SVGParser.h"
 
-bool SVGParser::GetVerticesFromSvgFile( const std::string& filePath, std::vector<std::vector<Point2f>> &vertices )
+bool SVGParser::GetVerticesFromSvgFile(const std::string& filePath, std::vector<std::vector<Point2f>> &vertices)
 {
     // Open the file
-    std::ifstream svgStream( filePath.c_str( ) );
+    std::ifstream svgStream(filePath.c_str());
 
-    if ( !svgStream )
+    if (!svgStream)
     {
         std::cerr << "SVGParser::GetVerticesFromSvgFile(..), failed to load vertices from file " << filePath << std::endl;
         return false;
@@ -18,19 +18,19 @@ bool SVGParser::GetVerticesFromSvgFile( const std::string& filePath, std::vector
     // Read the file
     std::string svgLine;
     std::string svgString;
-    while ( !svgStream.eof() )
+    while (!svgStream.eof())
     {
-        getline( svgStream, svgLine );
+        getline(svgStream, svgLine);
         svgString += svgLine;
     }
 
     // close the file
-    svgStream.close( );
+    svgStream.close();
 
     // Cleanup
-    RemoveSpaces( svgString );
+    RemoveSpaces(svgString);
 
-    if ( ! GetVerticesFromSvgString(svgString, vertices))
+    if (! GetVerticesFromSvgString(svgString, vertices))
     {
         std::cerr << "SVGParser::GetVerticesFromSvgFile(..), malformed or unsupported information in file " << filePath << std::endl;
         return false;
@@ -38,7 +38,7 @@ bool SVGParser::GetVerticesFromSvgFile( const std::string& filePath, std::vector
 
     // Get the viewbox rect to flip the y coordinates. SVG has org topleft, the framework bottom left.
     std::string viewBoxValue;
-    if ( ! GetAttributeValue(svgString, "viewBox", viewBoxValue))
+    if (! GetAttributeValue(svgString, "viewBox", viewBoxValue))
     {
         std::cerr << "SVGParser::GetVerticesFromSvgFile(..), no viewbox information found in " << filePath << std::endl;
         vertices.clear();
@@ -62,30 +62,30 @@ bool SVGParser::GetVerticesFromSvgFile( const std::string& filePath, std::vector
     return true;
 }
 
-void SVGParser::RemoveSpaces( std::string& svgString )
+void SVGParser::RemoveSpaces(std::string& svgString)
 {
     // Remove spaces before and = chars
     size_t foundPos{};
-    while ( ( foundPos = svgString.find( " =" ) ) != std::string::npos )
+    while ((foundPos = svgString.find(" =")) != std::string::npos)
     {
-        svgString.replace( foundPos, 2, "=" );
+        svgString.replace(foundPos, 2, "=");
     }
     // Remove spaces after and = chars
-    while ( ( foundPos = svgString.find( "= " ) ) != std::string::npos )
+    while ((foundPos = svgString.find("= ")) != std::string::npos)
     {
-        svgString.replace( foundPos, 2, "=" );
+        svgString.replace(foundPos, 2, "=");
     }
-    //std::cout << svgString.size( ) << "\n";
+    //std::cout << svgString.size() << "\n";
     
     // Remove spaces before and > chars
-    while ( ( foundPos = svgString.find( " >" ) ) != std::string::npos )
+    while ((foundPos = svgString.find(" >")) != std::string::npos)
     {
-        svgString.replace( foundPos, 2, ">" );
+        svgString.replace(foundPos, 2, ">");
     }
     // Remove spaces after and < chars
-    while ( ( foundPos = svgString.find( "< " ) ) != std::string::npos )
+    while ((foundPos = svgString.find("< ")) != std::string::npos)
     {
-        svgString.replace( foundPos, 2, "<" );
+        svgString.replace(foundPos, 2, "<");
     }
     //std::cout << svgString << "\n";
 
@@ -148,12 +148,12 @@ bool SVGParser::GetVerticesFromSvgString(std::string& svgString, std::vector<std
     return true;
 }
 
-bool SVGParser::GetVerticesFromPathData( const std::string& pathData, std::vector<Point2f> &vertices )
+bool SVGParser::GetVerticesFromPathData(const std::string& pathData, std::vector<Point2f> &vertices)
 {
-    std::string pathCmdChars( ( "mMZzLlHhVvCcSsQqTtAa" ) );
+    std::string pathCmdChars(("mMZzLlHhVvCcSsQqTtAa"));
 
     // Use streamstream for parsing
-    std::stringstream ss( pathData );
+    std::stringstream ss(pathData);
 
     char cmd{ 0 };
     Point2f cursor{};
@@ -165,9 +165,9 @@ bool SVGParser::GetVerticesFromPathData( const std::string& pathData, std::vecto
     Point2f vertex{};
     char pathCommand{};
     ss >> pathCommand;
-    while ( !ss.eof( ) )
+    while (!ss.eof())
     {
-        //if ( strchr( pathCmdChars.c_str( ), pathCommand ) != 0 )
+        //if (strchr(pathCmdChars.c_str(), pathCommand) != 0)
         // if the command is a valid command letter, proceed
         if(pathCmdChars.find(pathCommand) != std::string::npos)
         {
@@ -178,47 +178,47 @@ bool SVGParser::GetVerticesFromPathData( const std::string& pathData, std::vecto
             // if not a command, then put it back
             // Attempts to decrease the current location in the stream by one character, 
             // making the last character extracted from the stream once again available to be extracted by input operation
-            ss.putback( pathCommand );
+            ss.putback(pathCommand);
         }
 
-        switch ( cmd )
+        switch (cmd)
         {
-        case ( 'Z' ):
-        case ( 'z' ):
+        case ('Z'):
+        case ('z'):
             isOpen = true;
             break;
 
-        case ( 'M' ):
-        case ( 'm' ):
-            if ( isOpen )
+        case ('M'):
+        case ('m'):
+            if (isOpen)
             {
-                cursor = FirstSvgPoint( ss, cursor, cmd, isOpen, true );
+                cursor = FirstSvgPoint(ss, cursor, cmd, isOpen, true);
                 startPoint = cursor;
-                vertices.push_back( cursor );
+                vertices.push_back(cursor);
                 isOpen = false;
                 break;
             }
             // Fallthrough when isOpen
-        case ( 'L' )://lineto
-        case ( 'l' ):
-            vertex = NextSvgPoint( ss, cursor, cmd, isOpen, true );
-            vertices.push_back( vertex );
+        case ('L')://lineto
+        case ('l'):
+            vertex = NextSvgPoint(ss, cursor, cmd, isOpen, true);
+            vertices.push_back(vertex);
             break;
 
-        case ( 'h' ): // horizontal lineto
-        case ( 'H' ):
-            vertex = NextSvgCoordX( ss, cursor, cmd, isOpen );
-            vertices.push_back( vertex );
+        case ('h'): // horizontal lineto
+        case ('H'):
+            vertex = NextSvgCoordX(ss, cursor, cmd, isOpen);
+            vertices.push_back(vertex);
             break;
 
-        case ( 'v' ): // vertical lineto
-        case ( 'V' ):
-            vertex = NextSvgCoordY( ss, cursor, cmd, isOpen );
-            vertices.push_back( vertex );
+        case ('v'): // vertical lineto
+        case ('V'):
+            vertex = NextSvgCoordY(ss, cursor, cmd, isOpen);
+            vertices.push_back(vertex);
             break;
 
-        case ( 'C' ):
-        case ( 'c' ):
+        case ('C'):
+        case ('c'):
             std::cerr << "SVGParser::GetVerticesFromPathData,  beziers are not supported.\nHave another look at the guide, or select all nodes in inkscape and press shift + L\n";
             return false;
             break;
@@ -235,7 +235,7 @@ bool SVGParser::GetVerticesFromPathData( const std::string& pathData, std::vecto
     return true;
 }
 
-bool SVGParser::GetElementContent( const std::string& svgText, const std::string& elementName, std::string& elementContent, size_t& startContentPos, size_t& endContentPos )
+bool SVGParser::GetElementContent(const std::string& svgText, const std::string& elementName, std::string& elementContent, size_t& startContentPos, size_t& endContentPos)
 {
     // 2 possible formats
     // <ElementName> content <ElementName/>
@@ -246,10 +246,10 @@ bool SVGParser::GetElementContent( const std::string& svgText, const std::string
 
     std::string startElement = "<" + elementName + ">";
     std::string endElement = "<" + elementName + "/>";
-    if ( (tempStartPos = svgText.find( startElement )) != std::string::npos )
+    if ((tempStartPos = svgText.find(startElement)) != std::string::npos)
     {
-        tempStartPos += startElement.length( );
-        if ( (tempEndPos = svgText.find( endElement ) ) != std::string::npos )
+        tempStartPos += startElement.length();
+        if ((tempEndPos = svgText.find(endElement)) != std::string::npos)
         {
             elementContent = svgText.substr(tempStartPos, tempEndPos - tempStartPos);
             startContentPos = tempStartPos;
@@ -271,10 +271,10 @@ bool SVGParser::GetElementContent( const std::string& svgText, const std::string
 
     startElement = "<" + elementName;
     endElement = "/>"; 
-    if ( (tempStartPos = svgText.find( startElement, tempStartPos) ) != std::string::npos )
+    if ((tempStartPos = svgText.find(startElement, tempStartPos)) != std::string::npos)
     {
-        tempStartPos += startElement.length( );
-        if ( (tempEndPos = svgText.find( endElement ) ) != std::string::npos )
+        tempStartPos += startElement.length();
+        if ((tempEndPos = svgText.find(endElement)) != std::string::npos)
         {
             elementContent = svgText.substr(tempStartPos, tempEndPos - tempStartPos);
             startContentPos = tempStartPos;
@@ -286,29 +286,29 @@ bool SVGParser::GetElementContent( const std::string& svgText, const std::string
 
 }
 
-bool SVGParser::GetAttributeValue( const std::string& svgText, const std::string& attributeName, std::string& attributeValue )
+bool SVGParser::GetAttributeValue(const std::string& svgText, const std::string& attributeName, std::string& attributeValue)
 {
     std::string searchAttributeName{ attributeName  + "="};
     
-    size_t attributePos =  svgText.find( searchAttributeName );
-    if( attributePos == std::string::npos )
+    size_t attributePos =  svgText.find(searchAttributeName);
+    if(attributePos == std::string::npos)
     {
         return false;
     }
 
-    size_t openingDoubleQuotePos{ svgText.find( "\"", attributePos ) };
-    if ( openingDoubleQuotePos == std::string::npos )
+    size_t openingDoubleQuotePos{ svgText.find("\"", attributePos) };
+    if (openingDoubleQuotePos == std::string::npos)
     {
         return false;
     }
 
-    size_t closingDoubleQuotePos{ svgText.find( "\"", openingDoubleQuotePos + 1) };
-    if ( closingDoubleQuotePos == std::string::npos )
+    size_t closingDoubleQuotePos{ svgText.find("\"", openingDoubleQuotePos + 1) };
+    if (closingDoubleQuotePos == std::string::npos)
     {
         return false;
     }
 
-    attributeValue = svgText.substr( openingDoubleQuotePos + 1, closingDoubleQuotePos - openingDoubleQuotePos  - 1);
+    attributeValue = svgText.substr(openingDoubleQuotePos + 1, closingDoubleQuotePos - openingDoubleQuotePos  - 1);
     //std::cout << attributeName << ":" << attributeValue << "\n";
     return true;
 }
@@ -318,84 +318,84 @@ bool SVGParser::GetAttributeValue( const std::string& svgText, const std::string
 // SVG has a really funky format,
 // not sure this code works for all cases.
 // TODO: Test cases!
-void SVGParser::SkipSvgComma( std::stringstream& svgStream, bool isRequired )
+void SVGParser::SkipSvgComma(std::stringstream& svgStream, bool isRequired)
 {
-    while ( true )
+    while (true)
     {
-        char c = char(svgStream.get( ));
+        char c = char(svgStream.get());
 
-        if ( svgStream.eof( ) )
+        if (svgStream.eof())
         {
-            if ( isRequired )
+            if (isRequired)
             {
                 std::cerr << "SVGParser::SkipSvgComma, expected comma or whitespace\n";
             }
             break;
         }
 
-        if ( c == ( ',' ) )
+        if (c == (','))
             return;
 
-        if ( !isspace( c ) )
+        if (!isspace(c))
         {
-            svgStream.unget( );
+            svgStream.unget();
             return;
         }
     }
 }
 
-float SVGParser::ReadSvgValue( std::stringstream& svgStream, float defaultValue )
+float SVGParser::ReadSvgValue(std::stringstream& svgStream, float defaultValue)
 {
     float s{};
     svgStream >> s;
 
-    if ( svgStream.eof( ) )
+    if (svgStream.eof())
     {
         s = defaultValue;
     }
     else
     {
-        SkipSvgComma( svgStream, false );
+        SkipSvgComma(svgStream, false);
     }
 
     return s;
 }
 
-float SVGParser::ReadSvgValue( std::stringstream& svgStream, bool separatorRequired )
+float SVGParser::ReadSvgValue(std::stringstream& svgStream, bool separatorRequired)
 {
     float s{};
     svgStream >> s;
-    SkipSvgComma( svgStream, separatorRequired );
+    SkipSvgComma(svgStream, separatorRequired);
     return s;
 }
 
 // Reads a single point
-Point2f SVGParser::ReadSvgPoint( std::stringstream& svgStream )
+Point2f SVGParser::ReadSvgPoint(std::stringstream& svgStream)
 {
     //std::cout << "ReadSvgPoint: "  << svgStream.str() << "\n";
     Point2f p{};
-    p.x = ReadSvgValue( svgStream, true );
-    p.y = ReadSvgValue( svgStream, false );
+    p.x = ReadSvgValue(svgStream, true);
+    p.y = ReadSvgValue(svgStream, false);
     return p;
 }
 
-Point2f SVGParser::FirstSvgPoint( std::stringstream& svgStream, Point2f& cursor, char cmd, bool isOpen, bool advance )
+Point2f SVGParser::FirstSvgPoint(std::stringstream& svgStream, Point2f& cursor, char cmd, bool isOpen, bool advance)
 {
-    if ( !isOpen )
+    if (!isOpen)
     {
         std::cerr << "SVGParser::FirstSvgPoint, expected 'Z' or 'z' command";
     }
 
-    Point2f p = ReadSvgPoint( svgStream );
+    Point2f p = ReadSvgPoint(svgStream);
 
-    if ( islower( cmd ) )
+    if (islower(cmd))
     {
         // Relative point
         p.x = cursor.x + p.x;
         p.y = cursor.y + p.y;
     }
 
-    if ( advance )
+    if (advance)
     {
         cursor = p;
     }
@@ -406,23 +406,23 @@ Point2f SVGParser::FirstSvgPoint( std::stringstream& svgStream, Point2f& cursor,
 // taking into account relative and absolute positioning.
 // Advances the cursor if requested.
 // Throws an exception if the figure is not open
-Point2f SVGParser::NextSvgPoint( std::stringstream& svgStream, Point2f& cursor, char cmd, bool isOpen, bool advance )
+Point2f SVGParser::NextSvgPoint(std::stringstream& svgStream, Point2f& cursor, char cmd, bool isOpen, bool advance)
 {
-    if ( isOpen )
+    if (isOpen)
     {
         std::cerr << "SVGParser::NextSvgPoint, expected 'M' or 'm' command\n";
     }
 
-    Point2f p = ReadSvgPoint( svgStream );
+    Point2f p = ReadSvgPoint(svgStream);
 
-    if ( islower( cmd ) )
+    if (islower(cmd))
     {
         // Relative point
         p.x = cursor.x + p.x;
         p.y = cursor.y + p.y;
     }
 
-    if ( advance )
+    if (advance)
     {
         cursor = p;
     }
@@ -431,9 +431,9 @@ Point2f SVGParser::NextSvgPoint( std::stringstream& svgStream, Point2f& cursor, 
 }
 
 // Reads next point, given only the new x coordinate 
-Point2f SVGParser::NextSvgCoordX( std::stringstream& svgStream, Point2f& cursor, char cmd, bool isOpen )
+Point2f SVGParser::NextSvgCoordX(std::stringstream& svgStream, Point2f& cursor, char cmd, bool isOpen)
 {
-    if ( isOpen )
+    if (isOpen)
     {
         std::cerr << "SVGParser::NextSvgCoordX, expected 'M' or 'm' command\n";
     }
@@ -441,7 +441,7 @@ Point2f SVGParser::NextSvgCoordX( std::stringstream& svgStream, Point2f& cursor,
     float c;
     svgStream >> c;
 
-    if ( islower( cmd ) )
+    if (islower(cmd))
     {
         // Relative point
         cursor.x += c;
@@ -455,9 +455,9 @@ Point2f SVGParser::NextSvgCoordX( std::stringstream& svgStream, Point2f& cursor,
 }
 
 // Reads next point, given only the new y coordinate 
-Point2f SVGParser::NextSvgCoordY( std::stringstream& svgStream, Point2f& cursor, char cmd, bool isOpen )
+Point2f SVGParser::NextSvgCoordY(std::stringstream& svgStream, Point2f& cursor, char cmd, bool isOpen)
 {
-    if ( isOpen )
+    if (isOpen)
     {
         std::cerr << "SVGParser::NextSvgCoordY, expected 'M' or 'm' command\n";
     }
@@ -465,7 +465,7 @@ Point2f SVGParser::NextSvgCoordY( std::stringstream& svgStream, Point2f& cursor,
     float c{};
     svgStream >> c;
 
-    if ( islower( cmd ) )
+    if (islower(cmd))
     {
         // Relative point
         cursor.y += c;

@@ -20,51 +20,51 @@ Vector2f Matrix2x3::Transform(const Vector2f& vector) const
 
 Point2f Matrix2x3::Transform(const Point2f& point) const
 {
-    Vector2f v{ Transform( Vector2f{ point } ) + orig };
+    Vector2f v{ Transform(Vector2f{ point }) + orig };
     return  v.ToPoint2f();
 }
 
 std::vector<Point2f> Matrix2x3::Transform(const Rectf & r) const
 {
     std::vector<Point2f> vertices{ 4 };
-    vertices[0] = Transform( Point2f{ r.left, r.bottom } );
-    vertices[1] = Transform( Point2f{ r.left, r.bottom + r.height } );
-    vertices[2] = Transform( Point2f{ r.left + r.width, r.bottom + r.height } );
-    vertices[3] = Transform( Point2f{ r.left + r.width, r.bottom } );
+    vertices[0] = Transform(Point2f{ r.left, r.bottom });
+    vertices[1] = Transform(Point2f{ r.left, r.bottom + r.height });
+    vertices[2] = Transform(Point2f{ r.left + r.width, r.bottom + r.height });
+    vertices[3] = Transform(Point2f{ r.left + r.width, r.bottom });
     return vertices;
 }
 
-void Matrix2x3::Transform( const Rectf& r, Point2f* transVertices ) const
+void Matrix2x3::Transform(const Rectf& r, Point2f* transVertices) const
 {
-    transVertices[0] = Transform( Point2f{ r.left, r.bottom } );
-    transVertices[1] = Transform( Point2f{ r.left, r.bottom + r.height } );
-    transVertices[2] = Transform( Point2f{ r.left + r.width, r.bottom + r.height } );
-    transVertices[3] = Transform( Point2f{ r.left + r.width, r.bottom } );
+    transVertices[0] = Transform(Point2f{ r.left, r.bottom });
+    transVertices[1] = Transform(Point2f{ r.left, r.bottom + r.height });
+    transVertices[2] = Transform(Point2f{ r.left + r.width, r.bottom + r.height });
+    transVertices[3] = Transform(Point2f{ r.left + r.width, r.bottom });
 }
 
 
-std::vector<Point2f> Matrix2x3::Transform( const std::vector<Point2f>& vertices ) const
+std::vector<Point2f> Matrix2x3::Transform(const std::vector<Point2f>& vertices) const
 {
-    size_t nrVectices{ vertices.size( ) };
+    size_t nrVectices{ vertices.size() };
     std::vector<Point2f> transformedVertices{ nrVectices };
-    for ( size_t idx{ 0 }; idx < nrVectices; ++idx )
+    for (size_t idx{ 0 }; idx < nrVectices; ++idx)
     {
-        transformedVertices[idx] = Transform( vertices[idx] );
+        transformedVertices[idx] = Transform(vertices[idx]);
     }
     return transformedVertices;
 }
 
-void Matrix2x3::Transform( const std::vector<Point2f>& vertices, Point2f* transVertices ) const
+void Matrix2x3::Transform(const std::vector<Point2f>& vertices, Point2f* transVertices) const
 {
-    Transform( vertices.data( ), transVertices, vertices.size( ) );
+    Transform(vertices.data(), transVertices, vertices.size());
 }
 
 
-void Matrix2x3::Transform( const Point2f* vertices, Point2f* transVertices, size_t nrVertices ) const
+void Matrix2x3::Transform(const Point2f* vertices, Point2f* transVertices, size_t nrVertices) const
 {
-    for ( size_t idx{ 0 }; idx < nrVertices; ++idx )
+    for (size_t idx{ 0 }; idx < nrVertices; ++idx)
     {
-        transVertices[idx] = Transform( vertices[idx] );
+        transVertices[idx] = Transform(vertices[idx]);
     }
 }
 
@@ -89,7 +89,7 @@ Matrix2x3 Matrix2x3::Inverse() const
     };
 }
 
-bool Matrix2x3::Equals(const Matrix2x3& other, float epsilon ) const
+bool Matrix2x3::Equals(const Matrix2x3& other, float epsilon) const
 {
     return dirX.Equals(other.dirX, epsilon) && 
         dirY.Equals(other.dirY, epsilon) && 
@@ -98,10 +98,10 @@ bool Matrix2x3::Equals(const Matrix2x3& other, float epsilon ) const
 
 std::string Matrix2x3::ToString() const
 {
-    return std::string( "Matrix2x3( x( ")  + 
-        std::to_string(dirX.x) + ", " + std::to_string( dirX.y ) 
-        + " ), y( " + std::to_string( dirY.x ) + ", " + std::to_string( dirY.y )
-        + " ), orig( " + std::to_string( orig.x ) + ", " + std::to_string( orig.y ) +  " )  )";
+    return std::string("Matrix2x3(x(")  + 
+        std::to_string(dirX.x) + ", " + std::to_string(dirX.y) 
+        + "), y(" + std::to_string(dirY.x) + ", " + std::to_string(dirY.y)
+        + "), orig(" + std::to_string(orig.x) + ", " + std::to_string(orig.y) +  ") )";
 }
 
 void Matrix2x3::SetAsIdentity()
@@ -114,8 +114,8 @@ void Matrix2x3::SetAsIdentity()
 void Matrix2x3::SetAsRotate(float degrees)
 {
     float radians = degrees * 3.1415926535f / 180;
-    dirX = Vector2f{ cos( radians ), sin( radians ) };
-    dirY = Vector2f{ -sin( radians ), cos( radians ) };
+    dirX = Vector2f{ cos(radians), sin(radians) };
+    dirY = Vector2f{ -sin(radians), cos(radians) };
     orig = Vector2f{ 0, 0 };
 }
 void Matrix2x3::SetAsTranslate(float tx, float ty)
@@ -147,12 +147,12 @@ void Matrix2x3::SetAsScale(float scale)
 Matrix2x3 Matrix2x3::CreateRotationMatrix(float degrees)
 {
     float radians = degrees * 3.1415926535f / 180;
-    return Matrix2x3( Vector2f{ cos( radians ), sin( radians ) }, Vector2f{ -sin(radians), cos( radians ) }, Vector2f{} );
+    return Matrix2x3(Vector2f{ cos(radians), sin(radians) }, Vector2f{ -sin(radians), cos(radians) }, Vector2f{});
 }
 
 Matrix2x3 Matrix2x3::CreateIdentityMatrix()
 {
-    return Matrix2x3( Vector2f{ 1, 0 }, Vector2f{ 0, 1 }, Vector2f{} );
+    return Matrix2x3(Vector2f{ 1, 0 }, Vector2f{ 0, 1 }, Vector2f{});
 }
 
 Matrix2x3 Matrix2x3::CreateScalingMatrix(float scale)
@@ -167,17 +167,17 @@ Matrix2x3 Matrix2x3::CreateScalingMatrix(Vector2f scaleVector)
 
 Matrix2x3 Matrix2x3::CreateScalingMatrix(float scaleX, float scaleY)
 {
-    return Matrix2x3( Vector2f{ scaleX, 0 }, Vector2f{ 0, scaleY }, Vector2f{} );
+    return Matrix2x3(Vector2f{ scaleX, 0 }, Vector2f{ 0, scaleY }, Vector2f{});
 }
 
 Matrix2x3 Matrix2x3::CreateTranslationMatrix(Vector2f origin)
 {
-    return Matrix2x3( Vector2f{ 1, 0 }, Vector2f{ 0, 1 }, origin );
+    return Matrix2x3(Vector2f{ 1, 0 }, Vector2f{ 0, 1 }, origin);
 }
 
 Matrix2x3 Matrix2x3::CreateTranslationMatrix(float tx, float ty)
 {
-    return CreateTranslationMatrix( Vector2f{ tx, ty } );
+    return CreateTranslationMatrix(Vector2f{ tx, ty });
 }
 
 // Operator overloading functionality
@@ -200,9 +200,9 @@ Matrix2x3 operator*(const Matrix2x3& lhs, const Matrix2x3& rhs)
     };
 }
 
-std::ostream& operator<<(std::ostream& os, const Matrix2x3& matrix )
+std::ostream& operator<<(std::ostream& os, const Matrix2x3& matrix)
 {
-    os << matrix.ToString( );
+    os << matrix.ToString();
     return os;
 }
 

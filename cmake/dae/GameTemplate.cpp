@@ -3,54 +3,54 @@
 
 #include "utils.h"
 
-GameClassName::GameClassName( const Window& window ) 
+GameClassName::GameClassName(const Window& window) 
     :BaseGame{ window }
 {
     Initialize();
 }
 
-GameClassName::~GameClassName( )
+GameClassName::~GameClassName()
 {
-    Cleanup( );
+    Cleanup();
 }
 
-void GameClassName::Initialize( )
+void GameClassName::Initialize()
 {
     
 }
 
-void GameClassName::Cleanup( )
+void GameClassName::Cleanup()
 {
 }
 
-void GameClassName::Update( float elapsedSec )
+void GameClassName::Update(float elapsedSec)
 {
     // Check keyboard state
-    //const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-    //if ( pStates[SDL_SCANCODE_RIGHT] )
+    //const Uint8 *pStates = SDL_GetKeyboardState(nullptr);
+    //if (pStates[SDL_SCANCODE_RIGHT])
     //{
     //    std::cout << "Right arrow key is down\n";
     //}
-    //if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
+    //if (pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
     //{
     //    std::cout << "Left and up arrow keys are down\n";
     //}
 }
 
-void GameClassName::Draw( ) const
+void GameClassName::Draw() const
 {
-    ClearBackground( );
+    ClearBackground();
 }
 
-void GameClassName::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
+void GameClassName::ProcessKeyDownEvent(const SDL_KeyboardEvent & e)
 {
     //std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
 }
 
-void GameClassName::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
+void GameClassName::ProcessKeyUpEvent(const SDL_KeyboardEvent& e)
 {
     //std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
-    //switch ( e.keysym.sym )
+    //switch (e.keysym.sym)
     //{
     //case SDLK_LEFT:
     //    //std::cout << "Left arrow key released\n";
@@ -65,15 +65,15 @@ void GameClassName::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
     //}
 }
 
-void GameClassName::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
+void GameClassName::ProcessMouseMotionEvent(const SDL_MouseMotionEvent& e)
 {
     //std::cout << "MOUSEMOTION event: " << e.x << ", " << e.y << std::endl;
 }
 
-void GameClassName::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
+void GameClassName::ProcessMouseDownEvent(const SDL_MouseButtonEvent& e)
 {
     //std::cout << "MOUSEBUTTONDOWN event: ";
-    //switch ( e.button )
+    //switch (e.button)
     //{
     //case SDL_BUTTON_LEFT:
     //    std::cout << " left button " << std::endl;
@@ -88,10 +88,10 @@ void GameClassName::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
     
 }
 
-void GameClassName::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
+void GameClassName::ProcessMouseUpEvent(const SDL_MouseButtonEvent& e)
 {
     //std::cout << "MOUSEBUTTONUP event: ";
-    //switch ( e.button )
+    //switch (e.button)
     //{
     //case SDL_BUTTON_LEFT:
     //    std::cout << " left button " << std::endl;
@@ -105,8 +105,8 @@ void GameClassName::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
     //}
 }
 
-void GameClassName::ClearBackground( ) const
+void GameClassName::ClearBackground() const
 {
-    glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
-    glClear( GL_COLOR_BUFFER_BIT );
+    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 }

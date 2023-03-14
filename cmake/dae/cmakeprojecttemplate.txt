@@ -3,7 +3,7 @@ projectName
 main.cpp
 projectName.h
 projectName.cpp
- )
+)
 
 set_target_properties(projectName PROPERTIES FOLDER Games)
 
@@ -17,13 +17,13 @@ source_group(
 )
 
 # create a list of files to copy
-IF( WIN32 )
+IF(WIN32)
 get_filename_component(SDL2_LIBRARY_PATH ${SDL2_LIBRARY} DIRECTORY)
 get_filename_component(SDL2_TTF_LIBRARY_PATH ${SDL2_TTF_LIBRARY} DIRECTORY) 
 get_filename_component(SDL2_IMAGE_LIBRARY_PATH ${SDL2_IMAGE_LIBRARY} DIRECTORY) 
 get_filename_component(SDL2_MIXER_LIBRARY_PATH ${SDL2_MIXER_LIBRARY} DIRECTORY) 
 
-set( THIRD_PARTY_DLLS
+set(THIRD_PARTY_DLLS
    "${SDL2_LIBRARY_PATH}/SDL2.dll"
    "${SDL2_TTF_LIBRARY_PATH}/SDL2_ttf.dll"
    "${SDL2_TTF_LIBRARY_PATH}/libfreetype-6.dll"
@@ -45,18 +45,18 @@ set( THIRD_PARTY_DLLS
 )
 
 # do the copying
-foreach( file_i ${THIRD_PARTY_DLLS})
+foreach(file_i ${THIRD_PARTY_DLLS})
     add_custom_command(
     TARGET projectName
     POST_BUILD
     COMMAND ${CMAKE_COMMAND}
      -E copy_if_different ${file_i} $<TARGET_FILE_DIR:projectName>)
-endforeach( file_i )
+endforeach(file_i)
 ENDIF()
 
-foreach( file_i ${THIRD_PARTY_DLLS})
+foreach(file_i ${THIRD_PARTY_DLLS})
     install(FILES ${file_i} DESTINATION bin)
-endforeach( file_i )
+endforeach(file_i)
 
 add_custom_command(TARGET projectName POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory

@@ -6,14 +6,14 @@
 class BaseGame
 {
 public:
-    explicit BaseGame( const Window& window );
-    BaseGame( const BaseGame& other ) = delete;
-    BaseGame& operator=( const BaseGame& other ) = delete;
+    explicit BaseGame(const Window& window);
+    BaseGame(const BaseGame& other) = delete;
+    BaseGame& operator=(const BaseGame& other) = delete;
     BaseGame(BaseGame&& other) = delete;
     BaseGame& operator=(BaseGame&& other) = delete;
-    virtual ~BaseGame( );
+    virtual ~BaseGame();
 
-    void Run( );
+    void Run();
 
     virtual void Update(float elapsedSec)
     {
@@ -66,6 +66,6 @@ private:
     const float m_MaxElapsedSeconds;
     
     // FUNCTIONS
-    void Initialize( );
-    void Cleanup( );
+    void Initialize();
+    void Cleanup();
 };

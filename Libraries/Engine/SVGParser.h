@@ -11,11 +11,11 @@ public:
 
 private:
     //static bool LoadGeometryFromSvgStream(unsigned char* pBlob, int blobSize, std::vector<Point2f> &vertices);
-    static void RemoveSpaces( std::string& svgString );
+    static void RemoveSpaces(std::string& svgString);
     static bool GetVerticesFromSvgString(std::string& svgText, std::vector<std::vector<Point2f>> &vertices);
-    static bool GetVerticesFromPathData( const std::string& pathData, std::vector<Point2f> &vertices );
-    static bool GetElementContent( const std::string& svgText, const std::string& elementName, std::string& elementValue, size_t& startContentPos, size_t& endContentPos);
-    static bool GetAttributeValue( const std::string& svgText, const std::string& attributeName, std::string& attributeValue );
+    static bool GetVerticesFromPathData(const std::string& pathData, std::vector<Point2f> &vertices);
+    static bool GetElementContent(const std::string& svgText, const std::string& elementName, std::string& elementValue, size_t& startContentPos, size_t& endContentPos);
+    static bool GetAttributeValue(const std::string& svgText, const std::string& attributeName, std::string& attributeValue);
 
 
     // Skips any optional commas in the stream
@@ -27,7 +27,7 @@ private:
     static float ReadSvgValue(std::stringstream& stream, bool separatorRequired);
 
     // Reads a single point
-    static Point2f ReadSvgPoint( std::stringstream& stream );
+    static Point2f ReadSvgPoint(std::stringstream& stream);
     
     // Read the first point, 
     // taking into account relative and absolute positioning.

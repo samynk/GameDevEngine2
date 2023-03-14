@@ -2,32 +2,32 @@
 #include <iostream>
 #include "SoundStream.h"
 
-SoundStream::SoundStream( const std::string& path )
-    :m_pMixMusic{ Mix_LoadMUS( path.c_str( )) }
+SoundStream::SoundStream(const std::string& path)
+    :m_pMixMusic{ Mix_LoadMUS(path.c_str()) }
 {
-    if ( m_pMixMusic == nullptr )
+    if (m_pMixMusic == nullptr)
     {
-        std::string errorMsg = "SoundStream: Failed to load " + path + ",\nSDL_mixer Error: " + Mix_GetError( );
+        std::string errorMsg = "SoundStream: Failed to load " + path + ",\nSDL_mixer Error: " + Mix_GetError();
         std::cerr << errorMsg;
     }
 }
 
-SoundStream::~SoundStream( )
+SoundStream::~SoundStream()
 {
-    Mix_FreeMusic( m_pMixMusic );
+    Mix_FreeMusic(m_pMixMusic);
     m_pMixMusic = nullptr;
 }
 
-bool SoundStream::IsLoaded( ) const
+bool SoundStream::IsLoaded() const
 {
     return m_pMixMusic != nullptr;
 }
 
-bool SoundStream::Play(bool repeat ) const
+bool SoundStream::Play(bool repeat) const
 {
-    if ( m_pMixMusic != nullptr )
+    if (m_pMixMusic != nullptr)
     {
-        int result{ Mix_PlayMusic( m_pMixMusic, repeat ? -1 : 1 ) };
+        int result{ Mix_PlayMusic(m_pMixMusic, repeat ? -1 : 1) };
         return result == 0 ? true : false;
     }
     else
@@ -36,32 +36,32 @@ bool SoundStream::Play(bool repeat ) const
     }
 }
 
-void SoundStream::Stop( )
+void SoundStream::Stop()
 {
-    Mix_HaltMusic( );
+    Mix_HaltMusic();
 }
-void SoundStream::Pause( )
+void SoundStream::Pause()
 {
-    Mix_PauseMusic( );
-}
-
-void SoundStream::Resume( )
-{
-    Mix_ResumeMusic( );
+    Mix_PauseMusic();
 }
 
-int SoundStream::GetVolume( )
+void SoundStream::Resume()
 {
-    return Mix_VolumeMusic( -1 );
+    Mix_ResumeMusic();
 }
 
-bool SoundStream::IsPlaying( )
+int SoundStream::GetVolume()
 {
-    return Mix_PlayingMusic( ) == 0 ? false : true;
+    return Mix_VolumeMusic(-1);
 }
 
-void SoundStream::SetVolume( int value )
+bool SoundStream::IsPlaying()
 {
-    Mix_VolumeMusic( value );
+    return Mix_PlayingMusic() == 0 ? false : true;
+}
+
+void SoundStream::SetVolume(int value)
+{
+    Mix_VolumeMusic(value);
 }
 

@@ -4,33 +4,33 @@
 #include "Texture.h"
 
 
-Texture::Texture( const std::string& imagePath )
+Texture::Texture(const std::string& imagePath)
     :m_Id{ }
     ,m_Width{ 10.0f }
     ,m_Height{ 10.0f }
     ,m_CreationOk{ false }
 {
-    CreateFromImage( imagePath );
+    CreateFromImage(imagePath);
 }
 
-Texture::Texture( const std::string& text, TTF_Font *pFont, const Color4f& textColor )
+Texture::Texture(const std::string& text, TTF_Font *pFont, const Color4f& textColor)
     :m_Id{}
     ,m_Width{ 10.0f }
     ,m_Height{ 10.0f }
     ,m_CreationOk{ false }
 {
-    CreateFromString( text, pFont, textColor );
+    CreateFromString(text, pFont, textColor);
 }
 
-Texture::Texture( const std::string& text, const std::string& fontPath, int ptSize, const Color4f& textColor )
+Texture::Texture(const std::string& text, const std::string& fontPath, int ptSize, const Color4f& textColor)
     :m_Id{}
     ,m_Width{ 10.0f }
     ,m_Height{ 10.0f }
     ,m_CreationOk{ false }
 {
-    CreateFromString( text, fontPath, ptSize, textColor );
+    CreateFromString(text, fontPath, ptSize, textColor);
 }
-Texture::Texture( Texture&& other ) noexcept
+Texture::Texture(Texture&& other) noexcept
     :m_Id{ other.m_Id }
     ,m_Width{ other.m_Width }
     ,m_Height{ other.m_Height }
@@ -40,7 +40,7 @@ Texture::Texture( Texture&& other ) noexcept
     other.m_CreationOk = false;
 }
 
-Texture& Texture::operator=( Texture&& other ) noexcept
+Texture& Texture::operator=(Texture&& other) noexcept
 {
     if (this != &other)// no self assignment
     {
@@ -57,10 +57,10 @@ Texture& Texture::operator=( Texture&& other ) noexcept
 
 Texture::~Texture()
 {
-    glDeleteTextures( 1, &m_Id );
+    glDeleteTextures(1, &m_Id);
 }
 
-void Texture::CreateFromImage( const std::string& path )
+void Texture::CreateFromImage(const std::string& path)
 {
     m_CreationOk = true;
 
@@ -79,29 +79,29 @@ void Texture::CreateFromImage( const std::string& path )
 
 }
 
-void Texture::CreateFromString( const std::string& text, const std::string& fontPath, int ptSize, const Color4f& textColor )
+void Texture::CreateFromString(const std::string& text, const std::string& fontPath, int ptSize, const Color4f& textColor)
 {
     m_CreationOk = true;
 
     // Create font
     TTF_Font *pFont{};
-    pFont = TTF_OpenFont( fontPath.c_str( ), ptSize );
-    if(pFont == nullptr )
+    pFont = TTF_OpenFont(fontPath.c_str(), ptSize);
+    if(pFont == nullptr)
     {
-        std::cerr << "Texture::CreateFromString, error when calling TTF_OpenFont: " << TTF_GetError( ) << std::endl;
+        std::cerr << "Texture::CreateFromString, error when calling TTF_OpenFont: " << TTF_GetError() << std::endl;
         m_CreationOk = false;
         return;
     }
 
     // Create texture using this font and close font afterwards
-    CreateFromString( text, pFont, textColor );
-    TTF_CloseFont( pFont );
+    CreateFromString(text, pFont, textColor);
+    TTF_CloseFont(pFont);
 }
 
-void Texture::CreateFromString( const std::string& text, TTF_Font *pFont, const Color4f& color )
+void Texture::CreateFromString(const std::string& text, TTF_Font *pFont, const Color4f& color)
 {
     m_CreationOk = true;
-    if ( pFont == nullptr )
+    if (pFont == nullptr)
     {
         std::cerr << "Texture::CreateFromString, invalid TTF_Font pointer\n" ;
         m_CreationOk = false;
@@ -110,40 +110,40 @@ void Texture::CreateFromString( const std::string& text, TTF_Font *pFont, const 
 
     // Render text surface
     SDL_Color textColor{};
-    textColor.r = Uint8( color.r * 255 );
-    textColor.g = Uint8( color.g * 255 );
-    textColor.b = Uint8( color.b * 255 );
-    textColor.a = Uint8( color.a * 255 );
+    textColor.r = Uint8(color.r * 255);
+    textColor.g = Uint8(color.g * 255);
+    textColor.b = Uint8(color.b * 255);
+    textColor.a = Uint8(color.a * 255);
 
-    SDL_Surface* pLoadedSurface = TTF_RenderText_Blended( pFont, text.c_str( ), textColor );
-    if ( pLoadedSurface == nullptr )
+    SDL_Surface* pLoadedSurface = TTF_RenderText_Blended(pFont, text.c_str(), textColor);
+    if (pLoadedSurface == nullptr)
     {
-        std::cerr << "Texture::CreateFromString, error when calling TTF_RenderText_Blended: " << TTF_GetError( ) << std::endl;
+        std::cerr << "Texture::CreateFromString, error when calling TTF_RenderText_Blended: " << TTF_GetError() << std::endl;
         m_CreationOk = false;
         return;
     }
 
     // Copy to video memory
-    CreateFromSurface( pLoadedSurface );
+    CreateFromSurface(pLoadedSurface);
 
     // Free loaded surface
-    SDL_FreeSurface( pLoadedSurface );
+    SDL_FreeSurface(pLoadedSurface);
 }
 
-void Texture::CreateFromSurface( SDL_Surface* pSurface )
+void Texture::CreateFromSurface(SDL_Surface* pSurface)
 {
     m_CreationOk = true;
 
     //Get image dimensions
     m_Width = float(pSurface->w);
-    m_Height =float( pSurface->h);
+    m_Height =float(pSurface->h);
 
     // Get pixel format information and translate to OpenGl format
     GLenum pixelFormat{ GL_RGB };
-    switch ( pSurface->format->BytesPerPixel )
+    switch (pSurface->format->BytesPerPixel)
     {
     case 3:
-        if ( pSurface->format->Rmask == 0x000000ff )
+        if (pSurface->format->Rmask == 0x000000ff)
         {
             pixelFormat = GL_RGB;
         }
@@ -153,7 +153,7 @@ void Texture::CreateFromSurface( SDL_Surface* pSurface )
         }
         break;
     case 4:
-        if ( pSurface->format->Rmask == 0x000000ff )
+        if (pSurface->format->Rmask == 0x000000ff)
         {
             pixelFormat = GL_RGBA;
         }
@@ -202,21 +202,21 @@ void Texture::CreateFromSurface( SDL_Surface* pSurface )
     //                         any value that fits in one byte (so 0 through 255).  These values are to be interpreted as
     //                         *unsigned* values (since 0x00 should be dark and 0xFF should be bright).
     //  surface->pixels:    The actual data.  As above, SDL's array of bytes.
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, pSurface->w, pSurface->h, 0, pixelFormat, GL_UNSIGNED_BYTE, pSurface->pixels );
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pSurface->w, pSurface->h, 0, pixelFormat, GL_UNSIGNED_BYTE, pSurface->pixels);
 
     // Set the minification and magnification filters.  In this case, when the texture is minified (i.e., the texture's pixels (texels) are
     // *smaller* than the screen pixels you're seeing them on, linearly filter them (i.e. blend them together).  This blends four texels for
     // each sample--which is not very much.  Mipmapping can give better results.  Find a texturing tutorial that discusses these issues
     // further.  Conversely, when the texture is magnified (i.e., the texture's texels are *larger* than the screen pixels you're seeing
     // them on), linearly filter them.  Qualitatively, this causes "blown up" (overmagnified) textures to look blurry instead of blocky.
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
-void Texture::Draw( const Point2f& dstBottomLeft, const Rectf& srcRect ) const
+void Texture::Draw(const Point2f& dstBottomLeft, const Rectf& srcRect) const
 {
     const float epsilon{ 0.001f };
-    if ( !m_CreationOk )
+    if (!m_CreationOk)
     {
         if (!(srcRect.width > epsilon && srcRect.height > epsilon)) // No srcRect specified
         {
@@ -235,16 +235,16 @@ void Texture::Draw( const Point2f& dstBottomLeft, const Rectf& srcRect ) const
             dstRect.width = m_Width;
             dstRect.height = m_Height;
         }
-        Draw( dstRect, srcRect );
+        Draw(dstRect, srcRect);
     }
 }
 
-void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect ) const
+void Texture::Draw(const Rectf& dstRect, const Rectf& srcRect) const
 {
     const float epsilon{ 0.001f };
-    if ( !m_CreationOk )
+    if (!m_CreationOk)
     {
-        DrawFilledRect( dstRect );
+        DrawFilledRect(dstRect);
         return;
     }
 
@@ -256,7 +256,7 @@ void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect ) const
 
     float defaultDestWidth{};
     float defaultDestHeight{};
-    if ( !( srcRect.width > epsilon && srcRect.height > epsilon) ) // No srcRect specified
+    if (!(srcRect.width > epsilon && srcRect.height > epsilon)) // No srcRect specified
     {
         // Use complete texture
         textLeft = 0.0f;
@@ -271,8 +271,8 @@ void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect ) const
     {
         // Convert to the range [0.0, 1.0]
         textLeft = srcRect.left / m_Width;
-        textRight = ( srcRect.left + srcRect.width ) / m_Width;
-        textTop = ( srcRect.bottom - srcRect.height ) / m_Height;
+        textRight = (srcRect.left + srcRect.width) / m_Width;
+        textTop = (srcRect.bottom - srcRect.height) / m_Height;
         textBottom = srcRect.bottom / m_Height;
 
         defaultDestHeight = srcRect.height;
@@ -284,7 +284,7 @@ void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect ) const
     float vertexBottom{ dstRect.bottom };
     float vertexRight{};
     float vertexTop{};
-    if ( !( dstRect.width > 0.001f && dstRect.height > 0.001f ) ) // If no size specified use default size
+    if (!(dstRect.width > 0.001f && dstRect.height > 0.001f)) // If no size specified use default size
     {
         vertexRight = vertexLeft + defaultDestWidth;
         vertexTop = vertexBottom + defaultDestHeight;
@@ -297,29 +297,29 @@ void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect ) const
     }
 
     // Tell opengl which texture we will use
-    glBindTexture( GL_TEXTURE_2D, m_Id );
-    glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+    glBindTexture(GL_TEXTURE_2D, m_Id);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
     // Draw
-    glEnable( GL_TEXTURE_2D );
+    glEnable(GL_TEXTURE_2D);
     {
-        glBegin( GL_QUADS );
+        glBegin(GL_QUADS);
         {
-            glTexCoord2f( textLeft, textBottom );
-            glVertex2f( vertexLeft, vertexBottom );
+            glTexCoord2f(textLeft, textBottom);
+            glVertex2f(vertexLeft, vertexBottom);
 
-            glTexCoord2f( textLeft, textTop );
-            glVertex2f( vertexLeft, vertexTop );
+            glTexCoord2f(textLeft, textTop);
+            glVertex2f(vertexLeft, vertexTop);
 
-            glTexCoord2f( textRight, textTop );
-            glVertex2f( vertexRight, vertexTop );
+            glTexCoord2f(textRight, textTop);
+            glVertex2f(vertexRight, vertexTop);
 
-            glTexCoord2f( textRight, textBottom );
-            glVertex2f( vertexRight, vertexBottom );
+            glTexCoord2f(textRight, textBottom);
+            glVertex2f(vertexRight, vertexBottom);
         }
-        glEnd( );
+        glEnd();
     }
-    glDisable( GL_TEXTURE_2D );
+    glDisable(GL_TEXTURE_2D);
 }
 
 float Texture::GetWidth() const
@@ -332,7 +332,7 @@ float Texture::GetHeight() const
     return m_Height;
 }
 
-bool Texture::IsCreationOk( ) const
+bool Texture::IsCreationOk() const
 {
     return m_CreationOk;
 }
