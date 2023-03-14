@@ -12,8 +12,8 @@ target_link_libraries(projectName PUBLIC Core)
 target_link_libraries(projectName PUBLIC OpenGL::GL)
 
 source_group(
-	"Game code"
-	FILES projectName.h projectName.cpp main.cpp
+    "Game code"
+    FILES projectName.h projectName.cpp main.cpp
 )
 
 # create a list of files to copy
@@ -31,17 +31,17 @@ set( THIRD_PARTY_DLLS
    "${SDL2_IMAGE_LIBRARY_PATH}/zlib1.dll"
    "${SDL2_IMAGE_LIBRARY_PATH}/libjpeg-9.dll"
    "${SDL2_IMAGE_LIBRARY_PATH}/libpng16-16.dll"
-	"${SDL2_IMAGE_LIBRARY_PATH}/libtiff-5.dll"
-	"${SDL2_IMAGE_LIBRARY_PATH}/libwebp-7.dll"
-	"${SDL2_MIXER_LIBRARY_PATH}/SDL2_mixer.dll"
-	"${SDL2_MIXER_LIBRARY_PATH}/libFLAC-8.dll"
-	"${SDL2_MIXER_LIBRARY_PATH}/libmodplug-1.dll"
-	"${SDL2_MIXER_LIBRARY_PATH}/libmpg123-0.dll"
-	"${SDL2_MIXER_LIBRARY_PATH}/libogg-0.dll"
-	"${SDL2_MIXER_LIBRARY_PATH}/libopus-0.dll"
-	"${SDL2_MIXER_LIBRARY_PATH}/libopusfile-0.dll"
-	"${SDL2_MIXER_LIBRARY_PATH}/libvorbis-0.dll"
-	"${SDL2_MIXER_LIBRARY_PATH}/libvorbisfile-3.dll"
+    "${SDL2_IMAGE_LIBRARY_PATH}/libtiff-5.dll"
+    "${SDL2_IMAGE_LIBRARY_PATH}/libwebp-7.dll"
+    "${SDL2_MIXER_LIBRARY_PATH}/SDL2_mixer.dll"
+    "${SDL2_MIXER_LIBRARY_PATH}/libFLAC-8.dll"
+    "${SDL2_MIXER_LIBRARY_PATH}/libmodplug-1.dll"
+    "${SDL2_MIXER_LIBRARY_PATH}/libmpg123-0.dll"
+    "${SDL2_MIXER_LIBRARY_PATH}/libogg-0.dll"
+    "${SDL2_MIXER_LIBRARY_PATH}/libopus-0.dll"
+    "${SDL2_MIXER_LIBRARY_PATH}/libopusfile-0.dll"
+    "${SDL2_MIXER_LIBRARY_PATH}/libvorbis-0.dll"
+    "${SDL2_MIXER_LIBRARY_PATH}/libvorbisfile-3.dll"
 )
 
 # do the copying
