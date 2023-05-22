@@ -204,13 +204,17 @@ void BaseGame::Cleanup( )
 {
 	SDL_GL_DeleteContext( m_pContext );
 
+    // These aren't run to allow asan to detect symbols correctly
+#ifndef USING_ASAN
 	SDL_DestroyWindow( m_pWindow );
 	m_pWindow = nullptr;
 
 	//Quit SDL subsystems
-	Mix_Quit( );
-	TTF_Quit( );
-	SDL_Quit( );
+    
+    Mix_Quit();
+	TTF_Quit();
+	SDL_Quit();
+#endif
 
 	// enable console close window button
 	#ifdef _WIN32

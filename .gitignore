@@ -2,6 +2,8 @@
 out/
 Projects/
 .vs/
+build/
+.cache/
 
 # Prerequisites
 *.d
