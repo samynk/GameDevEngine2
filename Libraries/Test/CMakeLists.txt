@@ -18,7 +18,7 @@ add_executable(
 target_include_directories(CoreTest PUBLIC ${GAME_INCLUDE_PATH})
 
 target_link_libraries(
-  CoreTest
+  CoreTest PRIVATE
   GTest::gtest_main
   Core
 )

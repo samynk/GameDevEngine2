@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include <chrono>
 
 // https://BaseGameprogrammingpatterns.com/subclass-sandbox.html
 
@@ -14,6 +15,7 @@ public:
 	virtual ~BaseGame( );
 
 	void Run( );
+	void RunOnce();
 
 	virtual void Update(float elapsedSec)
 	{
@@ -62,10 +64,14 @@ private:
 	SDL_GLContext m_pContext;
 	// Init info
 	bool m_Initialized;
+	bool m_Quit{ false };
+	std::chrono::steady_clock::time_point m_T1;
 	// Prevent timing jumps when debugging
 	const float m_MaxElapsedSeconds;
 	
 	// FUNCTIONS
 	void Initialize( );
 	void Cleanup( );
+
+	friend void LoopCallback(void* arg);
 };

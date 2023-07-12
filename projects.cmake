@@ -1,0 +1,2 @@
+DefineGameProject(demo4 GraphicsDemo)
+DefineGameProject(demo5 TextureDemo)

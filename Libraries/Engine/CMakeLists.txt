@@ -50,5 +50,4 @@ SVGParser.cpp
 utils.h
 utils.cpp
 )
-
-set(GAME_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
+target_include_directories(Core INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

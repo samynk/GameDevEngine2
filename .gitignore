@@ -2,6 +2,9 @@
 out/
 Projects/
 .vs/
+_deps/
+resources/
+CMakeFiles/
 
 # Prerequisites
 *.d

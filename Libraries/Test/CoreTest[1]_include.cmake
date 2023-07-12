@@ -1,0 +1,5 @@
+if(EXISTS "/mnt/c/data/projects/GameDevEngine2/Libraries/Test/CoreTest[1]_tests.cmake")
+  include("/mnt/c/data/projects/GameDevEngine2/Libraries/Test/CoreTest[1]_tests.cmake")
+else()
+  add_test(CoreTest_NOT_BUILT CoreTest_NOT_BUILT)
+endif()

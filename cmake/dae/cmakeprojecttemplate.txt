@@ -1,15 +1,17 @@
 add_executable(
 projectName
 main.cpp
-projectName.h
-projectName.cpp
+gameClassName.h
+gameClassName.cpp
  )
 
 set_target_properties(projectName PROPERTIES FOLDER Games)
-
-target_include_directories(projectName PUBLIC ${GAME_INCLUDE_PATH})
 target_link_libraries(projectName PUBLIC Core)
-target_link_libraries(projectName PUBLIC OpenGL::GL)
+if (NOT Emscripten)
+	target_link_libraries(projectName PUBLIC OpenGL::GL)
+else()
+	SetupEmscripten(projectName)
+endif()
 
 source_group(
 	"Game code"
@@ -18,14 +20,17 @@ source_group(
 
 # create a list of files to copy
 IF( WIN32 )
-get_filename_component(SDL2_LIBRARY_PATH ${SDL2_LIBRARY} DIRECTORY)
-get_filename_component(SDL2_TTF_LIBRARY_PATH ${SDL2_TTF_LIBRARY} DIRECTORY) 
-get_filename_component(SDL2_IMAGE_LIBRARY_PATH ${SDL2_IMAGE_LIBRARY} DIRECTORY) 
-get_filename_component(SDL2_MIXER_LIBRARY_PATH ${SDL2_MIXER_LIBRARY} DIRECTORY) 
+get_target_property(SDL2_DLL SDL2::SDL2 IMPORTED_LOCATION)
+get_target_property(SDL2_IMAGE_DLL SDL2_image::SDL2_image IMPORTED_LOCATION)
+get_target_property(SDL2_TTF_DLL SDL2_ttf::SDL2_ttf IMPORTED_LOCATION)
+get_target_property(SDL2_MIXER_DLL SDL2_mixer::SDL2_mixer IMPORTED_LOCATION)
 
 set( THIRD_PARTY_DLLS
-   "${SDL2_LIBRARY_PATH}/SDL2.dll"
-   "${SDL2_TTF_LIBRARY_PATH}/SDL2_ttf.dll"
+   "${SDL2_DLL}"
+   "${SDL2_IMAGE_DLL}"
+   "${SDL2_TTF_DLL}"
+   "${SDL2_MIXER_DLL}"
+   #[["${SDL2_TTF_LIBRARY_PATH}/SDL2_ttf.dll"
    "${SDL2_TTF_LIBRARY_PATH}/libfreetype-6.dll"
    "${SDL2_IMAGE_LIBRARY_PATH}/SDL2_Image.dll"
    "${SDL2_IMAGE_LIBRARY_PATH}/zlib1.dll"
@@ -41,7 +46,7 @@ set( THIRD_PARTY_DLLS
 	"${SDL2_MIXER_LIBRARY_PATH}/libopus-0.dll"
 	"${SDL2_MIXER_LIBRARY_PATH}/libopusfile-0.dll"
 	"${SDL2_MIXER_LIBRARY_PATH}/libvorbis-0.dll"
-	"${SDL2_MIXER_LIBRARY_PATH}/libvorbisfile-3.dll"
+	"${SDL2_MIXER_LIBRARY_PATH}/libvorbisfile-3.dll"]]
 )
 
 # do the copying
